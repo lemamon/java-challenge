@@ -1,0 +1,5 @@
+* Environment requirements: JDK 1.8;
+* To execute this project: 
+	* javac Rank.java
+	* java Rank path/to/file path/to/file path/to/file...
+
