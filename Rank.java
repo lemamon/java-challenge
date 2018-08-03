@@ -1,11 +1,10 @@
+package com.company;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
-public class Rank {
+public class Main {
 
     private static HashMap<Integer, HashMap<String, Integer>> questions;
     private static HashMap<String, Integer> validAnswers;
@@ -17,9 +16,11 @@ public class Rank {
         validAnswers = new HashMap<>();
         invalidAnswers = new HashMap<>();
 
- 	for (int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
 	    readFile(args[i]);
         }
+
+	//inputFiles()
 
         favAnswers();
         printValidAnswers();
@@ -27,11 +28,18 @@ public class Rank {
     }
 
     private static void inputFiles() {
+	File folder = new File("temp");
+        File [] listFile = folder.listFiles();
 
+        for (int i = 0; i < listFile.length; i++) {
+            if (listFile[i].isFile()) {
+                readFile("temp/" + listFile[i].getName());
+            }
+        }
     }
 
     private static void readFile(String path) throws FileNotFoundException {
-        Scanner scanner =  new Scanner(new File(path));
+        Scanner scanner =  new Scanner(new File(path));//"temp/mybank_zqweSt.txt"));
         String companyName = scanner.nextLine();
 
         System.out.println(companyName);
@@ -59,7 +67,10 @@ public class Rank {
 
         }
 
-        map.forEach((integer, question) -> {
+        List<Question> list = new ArrayList<Question>(map.values());
+
+        Collections.sort(list);
+        list.forEach((question) -> {
             System.out.println(question.getAnswersPercents());
         });
 
@@ -157,7 +168,7 @@ public class Rank {
 }
 
 
-class Question {
+class Question implements Comparable<Question> {
     private int id;
     private int fav = 0;
     private int neutral = 0;
@@ -197,6 +208,11 @@ class Question {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public int compareTo(Question question) {
+        return getFavPercent() >= question.getFavPercent() ? -1 : 1;
     }
 }
 
